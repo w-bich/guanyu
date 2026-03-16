@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iPhone 关于本机</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+            white-space: nowrap !important;
+        }
+        body {
+            background: #f2f2f7;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            padding-bottom: 80px;
+            -webkit-font-smoothing: antialiased;
+        }
+        .iphone {
+            width: 375px;
+            height: 812px;
+            background: #f2f2f7;
+            border-radius: 40px;
+            overflow: hidden;
+            box-shadow: 0 0 50px rgba(0,0,0,0.2);
+            position: relative;
+        }
+        .dynamic-island {
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 105px;
+            height: 30px;
+            background: #000;
+            border-radius: 20px;
+            z-index: 10;
+        }
+        .status-bar {
+            height: 44px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            font-size: 15px;
+            font-weight: 500;
+            color: #000;
+        }
+        .nav-bar {
+            height: 44px;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            background: rgba(242, 242, 247, 0.9);
+            border-bottom: 1px solid #e5e5ea;
+            position: relative;
+        }
+        .back-btn {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #007aff;
+            font-size: 17px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .back-arrow {
+            width: 28px;
+            height: 28px;
+            fill: none;
+        }
+        .title {
+            font-size: 17px;
+            font-weight: 600;
+            flex: 1;
+            text-align: center;
+        }
+        .content {
+            padding: 16px;
+            height: calc(812px - 44px - 44px);
+            overflow-y: auto;
+        }
+        .section {
+            background: #fff;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+        .row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            border-bottom: 1px solid #e5e5ea;
+            font-size: 17px;
+            min-height: 44px;
+        }
+        .row:last-child {
+            border-bottom: none;
+        }
+        .label {
+            color: #000;
+            font-weight: 400;
+        }
+        .value {
+            color: #8e8e93;
+            font-weight: 400;
+            text-align: right;
+            border: none;
+            background: transparent;
+            outline: none;
+            font-size: 17px;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+            width: auto;
+            max-width: 65%;
+            margin-left: auto;
+        }
+        .value.monospace {
+            font-variant-numeric: slashed-zero !important;
+            -webkit-font-variant-numeric: slashed-zero !important;
+            font-family: "Consolas", "Courier New", "Monaco", monospace !important;
+            font-size: 16px !important;
+            max-width: 72% !important;
+            overflow: visible !important;
+            text-rendering: optimizeLegibility !important;
+        }
+        .arrow {
+            color: #c7c7cc;
+            margin-left: 4px;
+        }
+        .section-subtitle {
+            font-size: 13px;
+            color: #8e8e93;
+            padding: 8px 16px;
+        }
+        .signal {
+            display: flex;
+            align-items: flex-end;
+            gap: 2px;
+            height: 13px;
+        }
+        .signal-bar {
+            width: 3.5px;
+            background: #000;
+            border-radius: 1px;
+        }
+        .signal-bar:nth-child(1) { height: 4px; }
+        .signal-bar:nth-child(2) { height: 7px; }
+        .signal-bar:nth-child(3) { height: 10px; }
+        .signal-bar:nth-child(4) { height: 13px; }
+        .download-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 26px;
+            background: #007aff;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            z-index: 999;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="iphone" id="target">
+    <div class="dynamic-island"></div>
+    <div class="status-bar">
+        <span>11:43</span>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <div class="signal">
+                <div class="signal-bar"></div>
+                <div class="signal-bar"></div>
+                <div class="signal-bar"></div>
+                <div class="signal-bar"></div>
+            </div>
+            <span style="font-size: 14px; font-weight: 500;">5G</span>
+            <svg width="27" height="12" viewBox="0 0 27 12" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0.5" y="0.5" width="20" height="11" rx="3.5" stroke="#999" stroke-width="1" fill="white"/>
+                <rect x="2" y="2" width="16" height="8" rx="2.5" fill="black"/>
+                <path d="M21.5 4 L23 4.8 L23 7.2 L21.5 8 Z" fill="#999"/>
+            </svg>
+        </div>
+    </div>
+    <div class="nav-bar">
+        <a href="javascript:history.back()" class="back-btn">
+            <svg class="back-arrow" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M16 19l-7-7 7-7" stroke="#007aff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            返回
+        </a>
+        <div class="title">关于本机</div>
+    </div>
+    <div class="content">
+        <div class="section">
+            <div class="row">
+                <span class="label">名称</span>
+                <input type="text" class="value" value="iPhone" spellcheck="false">
+                <span class="arrow">›</span>
+            </div>
+            <div class="row">
+                <span class="label">iOS版本</span>
+                <input type="text" class="value" value="26.0" spellcheck="false">
+                <span class="arrow">›</span>
+            </div>
+            <div class="row">
+                <span class="label">型号名称</span>
+                <input type="text" class="value" value="iPhone 17 Pro" spellcheck="false">
+            </div>
+            <div class="row">
+                <span class="label">型号</span>
+                <input type="text" class="value" value="MG8T4CH/A" spellcheck="false">
+            </div>
+            <div class="row">
+                <span class="label">序列号</span>
+                <input type="text" class="value" value="CGJC6JG33P" spellcheck="false">
+            </div>
+        </div>
+        <div class="section">
+            <div class="row">
+                <span class="label">歌曲</span>
+                <input type="text" class="value" value="0" spellcheck="false">
+            </div>
+            <div class="row">
+                <span class="label">视频</span>
+                <input type="text" class="value" value="0" spellcheck="false">
+            </div>
+            <div class="row">
+                <span class="label">照片</span>
+                <input type="text" class="value" value="0" spellcheck="false">
+            </div>
+            <div class="row">
+                <span class="label">应用程序</span>
+                <input type="text" class="value" value="6" spellcheck="false">
+            </div>
+            <div class="row">
+                <span class="label">总容量</span>
+                <input type="text" class="value" value="256 GB" spellcheck="false">
+            </div>
+            <div class="row">
+                <span class="label">可用容量</span>
+                <input type="text" class="value" value="131.53 GB" spellcheck="false">
+            </div>
+        </div>
+        <div class="section">
+            <div class="row">
+                <span class="label">无线局域网地址</span>
+                <input type="text" class="value" value="54:32:C7:D3:57:80" spellcheck="false">
+            </div>
+            <div class="row">
+                <span class="label">蓝牙</span>
+                <input type="text" class="value" value="54:32:C7:C8:C5:85" spellcheck="false">
+            </div>
+            <div class="row">
+                <span class="label">调制解调器固件</span>
+                <input type="text" class="value" value="3.60.02" spellcheck="false">
+            </div>
+            <div class="row">
+                <span class="label">SEID</span>
+                <input type="text" class="value" value="" spellcheck="false" placeholder="不可用">
+                <span class="arrow">›</span>
+            </div>
+            <div class="row">
+                <span class="label">运营商锁</span>
+                <input type="text" class="value" value="无SIM卡限制" spellcheck="false">
+            </div>
+        </div>
+        <div class="section-subtitle">正面SIM卡</div>
+        <div class="section">
+            <div class="row">
+                <span class="label">网络</span>
+                <input type="text" class="value" value="中国联通" spellcheck="false">
+            </div>
+            <div class="row">
+                <span class="label">运营商</span>
+                <input type="text" class="value" value="中国联通 64.0" spellcheck="false">
+            </div>
+            <div class="row">
+                <span class="label">IMEI</span>
+                <input type="text" class="value monospace" value="35 599991 420743 0" spellcheck="false">
+            </div>
+            <div class="row">
+                <span class="label">ICCID</span>
+                <input type="text" class="value monospace" value="89860122801011915704" spellcheck="false">
+            </div>
+        </div>
+        <div class="section-subtitle">背面SIM卡</div>
+        <div class="section">
+            <div class="row">
+                <span class="label">IMEI2</span>
+                <input type="text" class="value monospace" value="35 599991 420800 8" spellcheck="false">
+            </div>
+        </div>
+        <div class="section">
+            <div class="row">
+                <span class="label">证书信任设置</span>
+                <input type="text" class="value" value="" spellcheck="false" placeholder="不可用">
+                <span class="arrow">›</span>
+            </div>
+        </div>
+    </div>
+</div>
+<button class="download-btn" onclick="saveEdit()">下载我修改后的画面</button>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script>
+async function saveEdit() {
+  const target = document.getElementById('target');
+  
+  if (document.fonts && document.fonts.ready) {
+    await document.fonts.ready;
+  }
+  html2canvas(target, {
+    scale: 2,
+    useCORS: true,
+    logging: false,
+    letterRendering: true
+  }).then(canvas => {
+    canvas.toBlob(function(blob) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = '关于本机_最终版.png';
+      a.click();
+      URL.revokeObjectURL(url);
+    }, 'image/png');
+  });
+}
+</script>
+</body>
+</html>
